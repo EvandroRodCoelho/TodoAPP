@@ -1,9 +1,14 @@
+import { GlobalStyle } from './Style/Global';
+import { Header } from './components/Header';
+import { Main } from './components/Main';
 
 export function App() {
   return (
-    <div>
-      <h1>OLa</h1>
-    </div>
+    <>
+      <GlobalStyle  />
+      <Header />
+      <Main />
+    </>
   );
 }
 
