@@ -1,12 +1,12 @@
 import styled from 'styled-components';
 
 export const Container = styled.main`
-    margin: 10px 0;
-
+    margin: 10px 20px;
 `;
 export const ContainerNewTask = styled.div`
     margin:  0 auto;
     max-width: 1100px;
+    width: 90%;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -20,4 +20,14 @@ export const ContainerNewTask = styled.div`
 
     }
 
+    @media screen and (max-width: 400px) {
+        width: 100%;
+        input{
+            width: 20%;
+            margin-left: 12px;
+        }
+        button{
+            margin-right: 20px;
+        }
+    }
 `;

@@ -18,8 +18,13 @@ export const ButtonContainer = styled.button<StylesButtonProps>`
     color:${props => props.color ? props.color : '#000'};
     background-color: ${props => props.background};
     font-weight: ${props => props.fontWeight};
+    border:1px #000;
     &:hover {
         opacity: 0.8;
         background-color:${props => props.background}; ;
+    }
+
+    @media screen and (max-width: 700px) {
+        padding: 15px 8px;
     }
 `;
