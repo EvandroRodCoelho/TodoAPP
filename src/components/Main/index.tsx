@@ -1,50 +1,14 @@
-import { ChangeEvent, useState,KeyboardEvent, useEffect } from 'react';
+import { ChangeEvent, useState, useEffect } from 'react';
+import { useTodo } from '../../hooks/useTodo';
 import { Button } from '../Button';
 import { Task } from '../Task';
 import { Container, ContainerNewTask } from './styles';
-interface TasksProps {
-  id: number;
-  task: string;
-  checked: boolean;
-}
 export function Main() {
-  const [tasks, setTasks] = useState<TasksProps[] | []>([]);
-  const [taskText, setTaskText] = useState('');
+
   const [isFirstRender, setIsFirstRender] = useState(true);
+  const { removeTodo, keyUpEnter,
+    changeCheckbox, addTodo, setTasks,handleText,todos} = useTodo();
 
-  function handleText(event:ChangeEvent<HTMLInputElement>) {
-    const newTodoText = event.target.value;
-    setTaskText(newTodoText);
-  }
-
-  function addTodo() {
-    if (taskText) {
-      const newTodo: TasksProps = {
-        id: Math.floor(Date.now() * Math.random()), //Gerar id aleatório
-        task: taskText,
-        checked: false
-      };
-
-      setTasks((previous) => [...previous, newTodo]);
-      localStorage.setItem('todo', JSON.stringify(tasks));
-    }
-  }
-
-  function removeTodo(idTodo: number) {
-    const newTodoList = tasks.filter(task => task.id != idTodo);
-    setTasks(newTodoList);
-  }
-
-  function changeCheckbox(index:number) {
-    const allTodo = [...tasks];
-    allTodo[index].checked = !allTodo[index].checked;
-    setTasks(allTodo);
-  }
-  function keyUpEnter(event:KeyboardEvent<HTMLInputElement>) {
-    if (event.code == 'Enter' && taskText) {
-      addTodo();
-    }
-  }
 
 
   useEffect(() => {
@@ -55,8 +19,8 @@ export function Main() {
       return;
     }
 
-    localStorage.setItem('todo', JSON.stringify(tasks));
-  },[tasks]);
+    localStorage.setItem('todo', JSON.stringify(todos));
+  },[todos]);
 
 
   return (
@@ -73,7 +37,7 @@ export function Main() {
           type="button"
         />
       </ContainerNewTask>
-      {tasks.map((value, index) => (
+      {todos.map((value, index) => (
         <Task
           Click={() => removeTodo(value.id)}
           task={value.task}
