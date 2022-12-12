@@ -1,4 +1,4 @@
-import { ChangeEvent, useState,KeyboardEvent } from 'react';
+import { ChangeEvent, useState,KeyboardEvent, useEffect } from 'react';
 import { Button } from '../Button';
 import { Task } from '../Task';
 import { Container, ContainerNewTask } from './styles';
@@ -10,6 +10,7 @@ interface TasksProps {
 export function Main() {
   const [tasks, setTasks] = useState<TasksProps[] | []>([]);
   const [taskText, setTaskText] = useState('');
+  const [isFirstRender, setIsFirstRender] = useState(true);
 
   function handleText(event:ChangeEvent<HTMLInputElement>) {
     const newTodoText = event.target.value;
@@ -23,7 +24,9 @@ export function Main() {
         task: taskText,
         checked: false
       };
-      setTasks((previous)=>[...previous, newTodo]);
+
+      setTasks((previous) => [...previous, newTodo]);
+      localStorage.setItem('todo', JSON.stringify(tasks));
     }
   }
 
@@ -42,16 +45,32 @@ export function Main() {
       addTodo();
     }
   }
+
+
+  useEffect(() => {
+    if (isFirstRender) {
+      const initialList = JSON.parse(`${localStorage.getItem('todo')}` );
+      if (initialList) setTasks(initialList);
+      setIsFirstRender(false);
+      return;
+    }
+
+    localStorage.setItem('todo', JSON.stringify(tasks));
+  },[tasks]);
+
+
   return (
     <Container>
       <ContainerNewTask>
         <input type="text"
-          onChange={(e) => handleText(e)}
-          onKeyUp={(event)=>keyUpEnter(event)} />
-        <Button text='Adicionar'
+          onChange={(event) => handleText(event)}
+          onKeyUp={(event) => keyUpEnter(event)}
+          placeholder='Digite sua tarefa'/>
+        <Button text='+'
           background='transparent'
           fontWeight='500'
           onClick={()=>addTodo()}
+          type="button"
         />
       </ContainerNewTask>
       {tasks.map((value, index) => (
@@ -61,7 +80,8 @@ export function Main() {
           checked={value.checked}
           key={value.id}
           onClickCheckbox={() => changeCheckbox(index)}
-          index={index} />
+          index={index}
+          id={value.id} />
 
       ))}
     </Container>

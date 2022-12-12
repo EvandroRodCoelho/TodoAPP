@@ -6,22 +6,26 @@ interface TaskProps extends ContainerProps {
   Click: () => void;
   onClickCheckbox: (index: number) => void;
   index: number;
+  id: number;
 }
 
 
-export function Task({task,checked , Click, onClickCheckbox , index}:TaskProps) {
-
+export function Task({
+  task, checked, Click, onClickCheckbox, index, id
+}: TaskProps) {
 
   return (
     <Container checked={checked}>
       <input type="checkbox"
-        onClick={() => onClickCheckbox(index)} />
-      <span>{task }</span>
+        onClick={() => onClickCheckbox(index)}
+        checked={checked} id={`${id}`} />
+      <label htmlFor={`${id}`}>{task}</label>
       <Button text="Remover"
-        background='red'
-        color='#fff'
+        background='#FF495C'
+        color='#FCFCFC'
         fontWeight='500'
-        onClick={()=>Click()}/>
+        onClick={() => Click()}
+        type='button'/>
     </Container>
   );
 }
